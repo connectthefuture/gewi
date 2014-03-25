@@ -18,14 +18,18 @@ void simple_click_callback() {
 }
 
 int main(int argc, char **argv) {
-    initialize(); //Use the bootstrap initializer and window creation
-    GLFWwindow *main_window = create_window(640, 480, "GEWI test");
+    initialize(true); //Use the bootstrap initializer and window creation
+    GLFWwindow *main_window = create_window(640, 480, "GEWI test", true);
     
-    /*UI *test_ui = create_ui(); //Creates a new UI instance based on the UI root
+    UI *test_ui = new UI();
     
+    //A simple button
+    Button *test_button = new Button();
+    test_button->set_click_callback(simple_click_callback);
+    /*
     //Create some simple widgets
     Text *test_text = new Text("This is some test text", "some font.ttf", 12);
-    Button *test_button = new Button();
+    
     
     //Install callbacks
     test_button->set_callback(simple_click_callback);
@@ -36,16 +40,17 @@ int main(int argc, char **argv) {
     
     //Enter the main loop
     while(!glfwWindowShouldClose(main_window)) {
-        //test_ui->render();
+        test_ui->render();
         
         glfwSwapBuffers(main_window);
         glfwPollEvents();
     }
     
     //Clean up
-    /*delete test_ui;
-    delete test_text;
-    delete test_button;*/
+    
+    delete test_ui;
+    
+    glfwTerminate();
     
     return 0;
 }

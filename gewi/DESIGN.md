@@ -39,4 +39,10 @@ built upon and extended.
       This is a simple test to make sure text can be rendered properly.
     * Button: A simple clickable button. Embeds a container, so it should
       support text embedding.
+      
+      
+
+UI Object: Represents and object in the UI
+UI Root: A single special container
+    
         

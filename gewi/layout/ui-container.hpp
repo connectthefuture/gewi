@@ -1,10 +1,25 @@
 #ifndef GEWI_LAYOUT_CONTAINER
 #define GEWI_LAYOUT_CONTAINER
-class UIContainer {
-protected:
-    float x, y; //Position relative to the parent
-    unsigned width, height; //In OpenGL coordinates (e.g. 2x2 will fill the entire parent)
-public:
-    
-};
+
+#include <vector> 
+
+#include "../core/ui-object.hpp"
+
+namespace gewi {
+    class UIContainer : public UIObject {
+    protected:
+        UIContainer *parent;
+        std::vector<UIObject *> children; //Can have arbitrary children
+    public:
+        void render();
+        UIContainer();
+        ~UIContainer();
+        
+        //Simple get and set methods for the parents
+        UIContainer *get_parent();
+        void set_parent(UIContainer *parent);
+        
+        void add_ui_object(UIObject *obj);
+    };
+}
 #endif
