@@ -14,41 +14,54 @@
 
 using namespace gewi; //Make sure we use the gewi namespace
 
+static UI *test_ui = nullptr;
+
 void simple_click_callback() {
     std::cout << "Click callback triggered\n";
+}
+
+void mouse_callback(GLFWwindow *window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        double x, y;
+        int width, height;
+        glfwGetCursorPos(window, &x, &y);
+        glfwGetWindowSize(window, &width, &height);
+        //Normalize the coordinates to device space
+        x = (2.0f * x) / width - 1.0f;
+        y = 1.0f - (2.0f * y) / height;
+        test_ui->click(x, y);
+    }
 }
 
 int main(int argc, char **argv) {
     initialize(true); //Use the bootstrap initializer and window creation
     GLFWwindow *main_window = create_window(640, 480, "GEWI test", true);
+    //Register our callbacks
+    glfwSetMouseButtonCallback(main_window, mouse_callback);
     //Bootstrap a triangle
-    unsigned triangle = create_triangle();
+    /*unsigned triangle = create_triangle();
     //Load up the bootstrap shaders
     unsigned shader = load_shader("utils/bootstrap-shaders/bootstrap_v.glsl",
-                                  "utils/bootstrap-shaders/bootstrap_f.glsl");
+                                  "utils/bootstrap-shaders/bootstrap_f.glsl");*/
    
-    UI *test_ui = new UI();
+    unsigned shader1 = load_shader("gewi/render/shaders/flat_v.glsl",
+                                   "gewi/render/shaders/flat_f.glsl");
+    test_ui = new UI();
     
     //A simple button
     Button *test_button = new Button();
     test_button->set_click_callback(simple_click_callback);
-    /*
-    //Create some simple widgets
-    Text *test_text = new Text("This is some test text", "some font.ttf", 12);
     
+    //Position the button
+    test_button->set_dim(0.5, 0.5);
     
-    //Install callbacks
-    test_button->set_callback(simple_click_callback);
-    
-    //Add the widgets to the ui
-    test_ui->add_widget(test_text, -0.5f, -0.5f);
-    test_ui->add_widget(test_button, 0.0f, 0.0f);*/
+    test_ui->add_ui_object(test_button);
     
     //Enter the main loop
     while(!glfwWindowShouldClose(main_window)) {
-        glUseProgram(shader);
-        render_triangle(triangle);
-        
+        //glUseProgram(shader);
+        //render_triangle(triangle);
+        glUseProgram(shader1);
         test_ui->render();
         
         glfwSwapBuffers(main_window);

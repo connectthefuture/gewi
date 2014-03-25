@@ -4,7 +4,7 @@
 #include "../core/ui-object.hpp"
 #include "../interaction/clickable.hpp"
 namespace gewi {
-    class Button : public UIObject, public Clickable {
+    class Button : public Clickable {
     private:
     public:
         Button();

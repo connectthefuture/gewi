@@ -16,13 +16,14 @@ namespace gewi {
         virtual void render() = 0;
         virtual void change_position_or_size() { }
         
-        
-        
         //Simple setters and getters
         void set_xy(float x, float y);
         void set_dim(float width, float height);
         void get_xy(float &x, float &y);
         void get_dim(float &width, float &height);
+        
+        //Test for various attributes
+        virtual bool is_clickable() { return false; }
     };
 }
 #endif

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ui-container.hpp"
 
 using namespace gewi;
@@ -14,6 +15,15 @@ UIContainer::~UIContainer() {
 void UIContainer::add_ui_object(UIObject *obj) {
     children.push_back(obj);
     //Tell the children I am their new parent
+}
+
+void UIContainer::internal_click_callback(float x, float y) {
+    for (unsigned i = 0; i < children.size(); i++) {
+        if(children[i]->is_clickable()) {
+            Clickable *c = (Clickable *)children[i];
+            c->click(x, y);
+        }
+    } 
 }
 
 void UIContainer::render() {

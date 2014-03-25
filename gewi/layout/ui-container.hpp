@@ -4,12 +4,14 @@
 #include <vector> 
 
 #include "../core/ui-object.hpp"
+#include "../interaction/clickable.hpp"
 
 namespace gewi {
-    class UIContainer : public UIObject {
+    class UIContainer : public Clickable {
     protected:
         UIContainer *parent;
         std::vector<UIObject *> children; //Can have arbitrary children
+        void internal_click_callback(float x, float y);
     public:
         void render();
         UIContainer();

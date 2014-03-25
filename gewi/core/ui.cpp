@@ -1,8 +1,11 @@
 #include "ui.hpp"
 
+#include "../interaction/clickable.hpp"
+
 namespace gewi {
     UI::UI() {
         root = new UIContainer();
+        root->set_dim(1, 1);
     }
     UI::~UI() {
         delete root;
@@ -15,6 +18,6 @@ namespace gewi {
     }
     
     void UI::click(float x, float y) {
-        
+        root->click(x, y);
     }
 }

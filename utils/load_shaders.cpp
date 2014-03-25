@@ -48,7 +48,7 @@ GLuint compile_shader(const char *path, GLenum shader_type) {
 
 unsigned load_shader(const char *vertex_shader, //Required shaders
                      const char *fragment_shader,
-                     const char *geometry_shader,
+                     const char *geometry_shader, //Optional shaders (NOT YET SUPPORTED)
                      const char *tesselation_shader_control,
                      const char *tesselation_shader) {
     
