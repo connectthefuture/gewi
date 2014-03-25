@@ -88,9 +88,9 @@ static void write_to_bitmap(unsigned width, unsigned height, unsigned char *buff
         for ( int x=0; x<w; x++ )
         {
             unsigned char pixel[3];
-            pixel[0] = buffer[(height - y) * width + x];
-            pixel[1] = buffer[(height - y) * width + x];
-            pixel[2] = buffer[(height - y) * width + x];
+            pixel[0] = buffer[(y) * width + x];
+            pixel[1] = buffer[(y) * width + x];
+            pixel[2] = buffer[(y) * width + x];
 
             stream.write( (char*)pixel, 3 );
         }
@@ -160,7 +160,7 @@ FontAtlas::FontAtlas(string &font_file, unsigned font_size) {
         unsigned char *buff = g->bitmap.buffer;
         for (int j = 0; j < g->bitmap.rows; j++) {
             for (int k = 0; k < g->bitmap.width; k++) {
-                bitmap[(y + j) * bitmap_size + (x + k)] = *buff++;
+                bitmap[(bitmap_size - (y + j + 1)) * bitmap_size + (x + k)] = *buff++;
             }
         }
         //Store the position of the character
@@ -186,6 +186,13 @@ FontAtlas::~FontAtlas() {
     delete[] bitmap;
 }
 
+void FontAtlas::bind_for_render() {
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+}
+
+char_position FontAtlas::char_lookup(char c) {
+    return char_positions[(int) c];
+}
 void FontAtlas::create_texture() {
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);

@@ -17,6 +17,18 @@ void Mesh::load_vertex_data(unsigned num_vertices, glm::vec2 *verts) {
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
+void Mesh::load_tex_coords(unsigned num_vertices, glm::vec2 *tex_coords) {
+    assert(this->num_vertices == num_vertices);
+    glBindVertexArray(vao_id);
+    glGenBuffers(1, &texbuf_id);
+    glBindBuffer(GL_ARRAY_BUFFER, texbuf_id);
+    
+    //Pass on the data
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * num_vertices, tex_coords, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+}
+
 void Mesh::update_vertex_data(unsigned num_vertices, glm::vec2 *verts) {
     assert(this->num_vertices == num_vertices);
     

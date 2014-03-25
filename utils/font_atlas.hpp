@@ -22,6 +22,9 @@ public:
     FontAtlas(std::string &font_file, unsigned font_size);
     ~FontAtlas();
     
+    void bind_for_render();
+    char_position char_lookup(char c);
+    
 };
 
 //Functions that will make use of the font atlas cache

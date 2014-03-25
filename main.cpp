@@ -13,6 +13,8 @@
 #include "utils/load_shaders.hpp"
 #include "utils/font_atlas.hpp"
 
+#include <SOIL/SOIL.h>
+
 using namespace gewi; //Make sure we use the gewi namespace
 
 static UI *test_ui = nullptr;
@@ -42,15 +44,17 @@ int main(int argc, char **argv) {
     
     //Testing
     std::string font_file("/usr/share/fonts/truetype/freefont/FreeMono.ttf");
-    create_font_atlas(font_file, 40);
+    FontAtlas *font = create_font_atlas(font_file, 40);
+    font->bind_for_render();
+
     //Bootstrap a triangle
     /*unsigned triangle = create_triangle();
     //Load up the bootstrap shaders
     unsigned shader = load_shader("utils/bootstrap-shaders/bootstrap_v.glsl",
                                   "utils/bootstrap-shaders/bootstrap_f.glsl");*/
    
-    unsigned shader1 = load_shader("gewi/render/shaders/flat_v.glsl",
-                                   "gewi/render/shaders/flat_f.glsl");
+    unsigned shader1 = load_shader("gewi/render/shaders/texture_v.glsl",
+                                   "gewi/render/shaders/texture_f.glsl");
     test_ui = new UI();
     
     //A simple button
