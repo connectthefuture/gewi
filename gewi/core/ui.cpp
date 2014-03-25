@@ -13,4 +13,8 @@ namespace gewi {
     void UI::add_ui_object(UIObject *obj) {
         root->add_ui_object(obj);
     }
+    
+    void UI::click(float x, float y) {
+        
+    }
 }

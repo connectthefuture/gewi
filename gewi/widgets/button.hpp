@@ -7,7 +7,11 @@ namespace gewi {
     class Button : public UIObject, public Clickable {
     private:
     public:
-        void render() { }
+        Button();
+        ~Button();
+        void render();
+        
+        void change_position_or_size();
     };
 }
 #endif

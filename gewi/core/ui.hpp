@@ -13,6 +13,7 @@ namespace gewi {
         ~UI();
         void render();
         void add_ui_object(UIObject *obj);
+        void click(float x, float y);
     };
 }
 #endif
