@@ -111,6 +111,10 @@ FontAtlas::FontAtlas(string &font_file, unsigned font_size) {
         char_positions[i].y1 = 0;
         char_positions[i].x2 = 0;
         char_positions[i].y2 = 0;
+        char_positions[i].width = 0;
+        char_positions[i].height = 0;
+        char_positions[i].top = 0;
+        char_positions[i].left = 0;
     }
     
     //Attempt to load up the font file
@@ -160,14 +164,20 @@ FontAtlas::FontAtlas(string &font_file, unsigned font_size) {
         unsigned char *buff = g->bitmap.buffer;
         for (int j = 0; j < g->bitmap.rows; j++) {
             for (int k = 0; k < g->bitmap.width; k++) {
-                bitmap[(bitmap_size - (y + j + 1)) * bitmap_size + (x + k)] = *buff++;
+                bitmap[((y + j)) * bitmap_size + (x + k)] = *buff++;
             }
         }
         //Store the position of the character
         char_positions[i].x1 = (float) x / bitmap_size; 
-        char_positions[i].y1 = (float) y / bitmap_size;
-        char_positions[i].x2 = (x + (float) g->bitmap.width) / bitmap_size; 
-        char_positions[i].y2 = (y + (float) g->bitmap.rows) / bitmap_size;
+        char_positions[i].y1 = (float) (y) / bitmap_size;
+        char_positions[i].x2 = ((float) x + g->bitmap.width) / bitmap_size; 
+        char_positions[i].y2 = (float) ((y + h)) / bitmap_size;
+        char_positions[i].width = (float) g->bitmap.width / bitmap_size;
+        char_positions[i].height = (float) g->bitmap.rows / bitmap_size;
+        
+        char_positions[i].top = (float) g->bitmap_top / bitmap_size;
+        char_positions[i].left = (float) g->bitmap_left / bitmap_size;
+        //char_positions[i].y2 = (bitmap_size - ((float) y + g->bitmap.rows)) / bitmap_size;
        
         x += g->bitmap.width;
     }
@@ -199,6 +209,8 @@ void FontAtlas::create_texture() {
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP); 
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP); 
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, bitmap_size, bitmap_size, 0, GL_RED, GL_UNSIGNED_BYTE, bitmap);
 }

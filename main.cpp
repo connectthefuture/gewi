@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     //Testing
     std::string font_file("/usr/share/fonts/truetype/freefont/FreeMono.ttf");
     FontAtlas *font = create_font_atlas(font_file, 40);
-    font->bind_for_render();
+    //font->bind_for_render();
 
     //Bootstrap a triangle
     /*unsigned triangle = create_triangle();
@@ -64,7 +64,11 @@ int main(int argc, char **argv) {
     //Position the button
     test_button->set_dim(0.5, 0.5);
     
-    test_ui->add_ui_object(test_button);
+    //test_ui->add_ui_object(test_button);
+    
+    //Create a text
+    Text *test_text = new Text(font, "Hello World!");
+    test_ui->add_ui_object(test_text);
     
     //Enter the main loop
     while(!glfwWindowShouldClose(main_window)) {
