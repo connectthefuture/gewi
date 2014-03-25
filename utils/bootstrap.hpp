@@ -11,4 +11,8 @@ void initialize(bool verbose = false);
 //Creates a window and handles error checking and OpenGL/glew initialization.
 GLFWwindow *create_window(unsigned width, unsigned height, const char *name, bool verbose = false);
 
+GLuint create_triangle();
+
+void render_triangle(GLuint vao_id);
+
 #endif

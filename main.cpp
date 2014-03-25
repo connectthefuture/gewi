@@ -20,6 +20,8 @@ void simple_click_callback() {
 int main(int argc, char **argv) {
     initialize(true); //Use the bootstrap initializer and window creation
     GLFWwindow *main_window = create_window(640, 480, "GEWI test", true);
+    //Bootstrap a triangle
+    unsigned triangle = create_triangle();
     
     UI *test_ui = new UI();
     
@@ -40,6 +42,7 @@ int main(int argc, char **argv) {
     
     //Enter the main loop
     while(!glfwWindowShouldClose(main_window)) {
+        render_triangle(triangle);
         test_ui->render();
         
         glfwSwapBuffers(main_window);
