@@ -11,6 +11,7 @@
 #include "gewi/gewi.hpp"
 #include "utils/bootstrap.hpp"
 #include "utils/load_shaders.hpp"
+#include "utils/font_atlas.hpp"
 
 using namespace gewi; //Make sure we use the gewi namespace
 
@@ -38,6 +39,10 @@ int main(int argc, char **argv) {
     GLFWwindow *main_window = create_window(640, 480, "GEWI test", true);
     //Register our callbacks
     glfwSetMouseButtonCallback(main_window, mouse_callback);
+    
+    //Testing
+    std::string font_file("/usr/share/fonts/truetype/freefont/FreeMono.ttf");
+    create_font_atlas(font_file, 40);
     //Bootstrap a triangle
     /*unsigned triangle = create_triangle();
     //Load up the bootstrap shaders

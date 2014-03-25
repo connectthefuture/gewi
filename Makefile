@@ -1,6 +1,6 @@
 CXX=g++
-CXXFLAGS=-g -Wall -Werror -Wpedantic -std=c++11
-LDFLAGS=-lGLEW -lGL -lglfw3 -lX11 -lXxf86vm -lpthread -lXrandr -lXi -lSOIL
+CXXFLAGS=-g -Wall -Werror -Wpedantic -std=c++11 -I/usr/include/freetype2
+LDFLAGS=-lGLEW -lGL -lglfw3 -lX11 -lXxf86vm -lpthread -lXrandr -lXi -lSOIL -lfreetype
 
 UTILS_CPP := $(wildcard utils/*.cpp)
 
