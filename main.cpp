@@ -10,6 +10,7 @@
 
 #include "gewi/gewi.hpp"
 #include "utils/bootstrap.hpp"
+#include "utils/load_shaders.hpp"
 
 using namespace gewi; //Make sure we use the gewi namespace
 
@@ -22,7 +23,10 @@ int main(int argc, char **argv) {
     GLFWwindow *main_window = create_window(640, 480, "GEWI test", true);
     //Bootstrap a triangle
     unsigned triangle = create_triangle();
-    
+    //Load up the bootstrap shaders
+    unsigned shader = load_shader("utils/bootstrap-shaders/bootstrap_v.glsl",
+                                  "utils/bootstrap-shaders/bootstrap_f.glsl");
+   
     UI *test_ui = new UI();
     
     //A simple button
@@ -42,7 +46,9 @@ int main(int argc, char **argv) {
     
     //Enter the main loop
     while(!glfwWindowShouldClose(main_window)) {
+        glUseProgram(shader);
         render_triangle(triangle);
+        
         test_ui->render();
         
         glfwSwapBuffers(main_window);
