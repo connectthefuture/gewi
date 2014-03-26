@@ -36,10 +36,13 @@ UIObject::~UIObject() {
     delete style;
 }
 
-void UIObject::render() {
-    if (mesh != nullptr) mesh->render();
+void UIObject::render(Renderer *renderer) {
+    if (mesh != nullptr) {
+        glUniformMatrix4fv(renderer->transform_location, 1, GL_FALSE, &transform_matrix[0][0]);
+        mesh->render();
+    }
     for (unsigned i = 0; i < children.size(); i++) {
-        children[i]->render();
+        children[i]->render(renderer);
     }
 }
 
@@ -54,7 +57,8 @@ void UIObject::set_parent(UIObject *parent) {
 }
 
 void UIObject::update_transform() {
-    transform_matrix = glm::scale(width, 0.0f, height);
+    transform_matrix = glm::translate(x * 2.0f - 1.0f, -y * 2.0f + 1.0f, 0.0f) *
+                       glm::scale(width, -height, 1.0f); // - height accounts for the fact that the UI coordinates start at the upper left
 }
 
 void UIObject::apply_style() {
@@ -64,6 +68,13 @@ void UIObject::apply_style() {
         float value = style_to_dim(result, parent);
         if (result.back() == '%') width = parent->width * value;
         else width = value;
+    }
+    
+    result = style->get_style("height");
+    if (result != "") {
+        float value = style_to_dim(result, parent);
+        if (result.back() == '%') height = parent->height * value;
+        else height = value;
     }
     
     //Create the new matrices
@@ -90,6 +101,16 @@ bool UIObject::contains_point(float x, float y) {
 }
 void UIObject::click(float x, float y) {
     if (contains_point(x, y)) {
-        std::cout << "Clicked!";
+        if (click_callback != nullptr) {
+            click_callback(x, y);
+        }
+        //Send down to all children
+        for (unsigned i = 0; i < children.size(); i++) {
+            children[i]->click(x, y);
+        }
     }
+}
+
+void UIObject::set_click_callback(void (*callback)(float, float)) {
+    click_callback = callback;
 }

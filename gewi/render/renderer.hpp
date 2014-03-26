@@ -2,14 +2,15 @@
 #define GEWI_RENDER_RENDERER
 namespace gewi {
     class Renderer {
-    private:
+    private: 
         unsigned shader_id;
-        
     public:
-        Renderer();
+        Renderer(const char *vertex_shader, const char *fragment_shader);
         ~Renderer();
         
-        unsigned transform_loc;
+        void enable();
+        
+        int transform_location;
     };
 }
 

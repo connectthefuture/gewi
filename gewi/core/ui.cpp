@@ -1,11 +1,10 @@
-#include "../../utils/load_shaders.hpp"
 #include "ui.hpp"
 
 using namespace gewi;
 UI::UI() {
     root = new UIContainer();
-    //flat_shader = load_shader("gewi/render/shaders/flat_v.glsl",
-    //                          "gewi/render/shaders/flat_f.glsl");
+    flat_shader = new Renderer("gewi/render/shaders/flat_v.glsl",
+                               "gewi/render/shaders/flat_f.glsl");
 }
 
 UI::~UI() {
@@ -13,7 +12,8 @@ UI::~UI() {
 }
 
 void UI::render() {
-    root->render();
+    flat_shader->enable();
+    root->render(flat_shader);
 }
 
 void UI::add_ui_object(UIObject *obj) {

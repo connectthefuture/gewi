@@ -7,6 +7,7 @@
 #include "style.hpp"
 
 #include "../render/mesh.hpp"
+#include "../render/renderer.hpp"
 
 namespace gewi {
     class UIObject {
@@ -38,7 +39,7 @@ namespace gewi {
         //Every UIobject must be renderable.
         UIObject();
         virtual ~UIObject();
-        virtual void render();
+        virtual void render(Renderer *renderer);
         
         //Methods for dealing with the tree
         void add_child(UIObject *child);
@@ -52,6 +53,8 @@ namespace gewi {
         //Methods for interaction
         bool contains_point(float x, float y);
         void click(float x, float y);
+        
+        void set_click_callback(void (*callback)(float, float));
     };
 }
 #endif

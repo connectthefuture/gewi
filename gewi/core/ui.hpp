@@ -2,13 +2,14 @@
 #define GEWI_CORE_UI
 
 #include "../widgets/ui-container.hpp"
+#include "../render/renderer.hpp"
 #include "ui-object.hpp"
 
 namespace gewi {
     class UI {
     private:
         UIContainer *root;
-        unsigned flat_shader;
+        Renderer *flat_shader;
     public:
         UI();
         ~UI();
