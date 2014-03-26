@@ -15,6 +15,7 @@ namespace gewi {
         //Store the representation in screen space
         float x, y;
         float width, height;
+        float margin_top;
         
         glm::mat4 transform_matrix; //Combination of translation and scale.
         void update_transform();

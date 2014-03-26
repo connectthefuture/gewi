@@ -26,6 +26,7 @@ UIObject::UIObject() {
     style = new Style;
     x = y = 0.0f;
     width = height = 1.0f;
+    margin_top = 0.0f;
     transform_matrix = glm::mat4(1.0f);
     parent = nullptr;
     selected = false;
@@ -47,18 +48,33 @@ void UIObject::render(Renderer *renderer) {
 }
 
 void UIObject::add_child(UIObject *child) {
+    UIObject *last;
+    if (children.size() != 0)
+        last = children.back();
+    else
+        last = nullptr;
     children.push_back(child);
     child->set_parent(this);
+    //Position the child properly
+    //NOTE: For now we assume that each element will be on its own line, with x = 0;
+    if (last != nullptr) {
+        child->x = 0;
+        child->y = last->y + last->height;
+    }
+    else {
+        child->x = 0;
+        child->y = 0;
+    }
+        
 }
 
 void UIObject::set_parent(UIObject *parent) {
     this->parent = parent;
-    //Update everything
 }
 
 void UIObject::update_transform() {
-    transform_matrix = glm::translate(x * 2.0f - 1.0f, -y * 2.0f + 1.0f, 0.0f) *
-                       glm::scale(width, -height, 1.0f); // - height accounts for the fact that the UI coordinates start at the upper left
+    transform_matrix = glm::translate(x * 2.0f - 1.0f, -(y + margin_top) * 2.0f + 1.0f, 0.0f) *
+                       glm::scale(width * 2, -height * 2, 1.0f); // - height accounts for the fact that the UI coordinates start at the upper left
 }
 
 void UIObject::apply_style() {
@@ -75,6 +91,13 @@ void UIObject::apply_style() {
         float value = style_to_dim(result, parent);
         if (result.back() == '%') height = parent->height * value;
         else height = value;
+    }
+    
+    result = style->get_style("margin-top");
+    if (result != "") {
+        float value = style_to_dim(result, parent);
+        if (result.back() == '%') margin_top = parent->height * value;
+        else margin_top = value;
     }
     
     //Create the new matrices
@@ -96,8 +119,8 @@ std::string UIObject::get_style(std::string key) {
 
 //Methods for interaction
 bool UIObject::contains_point(float x, float y) {
-    return (this->x <= x && this->x + width >= x &&
-            this->y <= y && this->y + height >= y);
+    return (this->x < x && this->x + width > x &&
+            this->y < y && this->y + height > y);
 }
 void UIObject::click(float x, float y) {
     if (contains_point(x, y)) {
