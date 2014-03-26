@@ -38,7 +38,6 @@ void mouse_callback(GLFWwindow *window, int button, int action, int mods) {
 }
 
 void window_size_callback(GLFWwindow* window, int width, int height) {
-    std::cout << "New size " << width << " " << height << '\n';
     glViewport(0, 0, width, height);
 }
 
@@ -63,7 +62,7 @@ int main(int argc, char **argv) {
     
     test_button1->set_style("width", "30%");
     test_button1->set_style("height", "10%");
-    test_button1->set_style("margin-top", "5%");
+    test_button1->set_style("margin-top", "30%");
     test_button1->set_click_callback(simple_click_callback);
     
     //Enter the main loop

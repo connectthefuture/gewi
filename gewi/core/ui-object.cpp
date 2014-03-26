@@ -58,12 +58,12 @@ void UIObject::add_child(UIObject *child) {
     //Position the child properly
     //NOTE: For now we assume that each element will be on its own line, with x = 0;
     if (last != nullptr) {
-        child->x = 0;
-        child->y = last->y + last->height;
+        child->x_base = 0;
+        child->y_base = last->y_base + last->height;
     }
     else {
-        child->x = 0;
-        child->y = 0;
+        child->x_base = 0;
+        child->y_base = 0;
     }
         
 }
@@ -73,7 +73,7 @@ void UIObject::set_parent(UIObject *parent) {
 }
 
 void UIObject::update_transform() {
-    transform_matrix = glm::translate(x * 2.0f - 1.0f, -(y + margin_top) * 2.0f + 1.0f, 0.0f) *
+    transform_matrix = glm::translate(x * 2.0f - 1.0f, -y * 2.0f + 1.0f, 0.0f) *
                        glm::scale(width * 2, -height * 2, 1.0f); // - height accounts for the fact that the UI coordinates start at the upper left
 }
 
@@ -100,6 +100,9 @@ void UIObject::apply_style() {
         else margin_top = value;
     }
     
+    x = x_base;
+    y = y_base + margin_top;
+    
     //Create the new matrices
     update_transform();
 }
@@ -124,6 +127,7 @@ bool UIObject::contains_point(float x, float y) {
 }
 void UIObject::click(float x, float y) {
     if (contains_point(x, y)) {
+        click_handler(x, y); //Run internal callback then external callback
         if (click_callback != nullptr) {
             click_callback(x, y);
         }

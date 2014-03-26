@@ -13,6 +13,7 @@ namespace gewi {
     class UIObject {
     private:
         //Store the representation in screen space
+        float x_base, y_base;
         float x, y;
         float width, height;
         float margin_top;
@@ -54,6 +55,7 @@ namespace gewi {
         //Methods for interaction
         bool contains_point(float x, float y);
         void click(float x, float y);
+        virtual void click_handler(float x, float y) { }//Runs on a confirmed click
         
         void set_click_callback(void (*callback)(float, float));
     };
