@@ -45,4 +45,80 @@ built upon and extended.
 UI Object: Represents and object in the UI
 UI Root: A single special container
     
+    
+Layout and Styling
+==================
+
+I want to adopt an HTML/CSS style approach to styling/formating items. Perhaps
+I'll take a subset of the standard CSS. Somethings I might want to suppot:
+
+    * positioning keywords: float, absolute, relative
+    * dimension keywords: width, height, minimum width/height
+    * various units: %of parent, raw pixels
+    
+Should I extend this analogy and have each element be a container, with text as 
+the leaves? How does this interact with acceleration structures?
+
+All supported style attributes:
+
+    * width: (value, units)
+    * height: (value, units)
+    * position: [absolute, static]
+    * float: [left, right]
+    * top: (value, units) { only really useful if postion is absolute } 
+    * left: (value, units) { only really useful if postion is absolute } 
+
+Valuse should be integers, units should be either PERCENT, PIXELS. By default,
+all elements are assumed to have a width/height of 100%.
+
+UIObject
+--------
+
+Attributes:
+
+    * style attributes (perhaps stored as a map/unordered_map)
+    * internal representation of width/height/x/y
+    * root (perhaps for rendering acceleration)
+    * matrix representing transformation/scaling
+    * various callback methods
+        * click callback
+        * mouseover callback
+        * key callback
+    
+Methods:
+    
+    * update_parent: Sets the parent, and updates anything on the back end that inherits
+      from the parent.
+        parent = new_parent
         
+        If the width/height depend on the parent
+            update width/height matrix
+        If the position depended on the parent
+            update the position matrix
+        tell all chlidren that I've updated
+        
+    * render: Renders the actual UIObject (virtual)
+        perform error checking
+        upload model matrix;
+        render mesh; 
+        render children;
+      An alterntavie method would be to keep a render queue in the root, so we don't have
+      to thrash between shaders. Possible optimization.
+    * click/mouseover/key: Checks if the object is currently selected/mouseover/etc. If this
+      is the case it will call the callback. Recurses on children.
+        
+UIContainer
+-----------
+
+Basically just a non abstract version of a UIObject. Has no mesh, but will recursively render.
+
+Button
+------
+
+Extends the UIObject by adding a simple rectangular mesh.
+
+Text
+----
+
+Extends the UIObject, but requires a different renderer. Uses a font atlas to render text
+to the screen.
