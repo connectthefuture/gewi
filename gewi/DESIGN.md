@@ -122,3 +122,5 @@ Text
 
 Extends the UIObject, but requires a different renderer. Uses a font atlas to render text
 to the screen.
+
+A good resource is here http://www.html5rocks.com/en/tutorials/internals/howbrowserswork/

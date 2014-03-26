@@ -16,9 +16,8 @@ namespace gewi {
         float x_base, y_base;
         float x, y;
         float width, height;
-        float margin_top;
+        float margin_top, margin_bottom, margin_left, margin_right;
         
-        glm::mat4 transform_matrix; //Combination of translation and scale.
         void update_transform();
        
         //Members for dealing with the tree
@@ -37,6 +36,7 @@ namespace gewi {
         
     protected:
         Mesh *mesh;
+        glm::mat4 transform_matrix; //Combination of translation and scale.
     public:
         //Every UIobject must be renderable.
         UIObject();

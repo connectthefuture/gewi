@@ -26,7 +26,7 @@ UIObject::UIObject() {
     style = new Style;
     x = y = 0.0f;
     width = height = 1.0f;
-    margin_top = 0.0f;
+    margin_top = margin_left = margin_right = margin_bottom = 0.0f;
     transform_matrix = glm::mat4(1.0f);
     parent = nullptr;
     selected = false;

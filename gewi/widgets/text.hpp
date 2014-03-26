@@ -13,7 +13,7 @@ namespace gewi {
     public:
         Text(FontAtlas *atlas, std::string text);
         ~Text();
-        void render();
+        void render(Renderer *renderer);
     };
 }
 #endif

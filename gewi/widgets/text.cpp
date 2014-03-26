@@ -5,7 +5,7 @@ using namespace gewi;
 
 Text::Text(FontAtlas *atlas, std::string text) {
     this->atlas = atlas;
-    unsigned num_verts = text.length() * 6;
+    /*unsigned num_verts = text.length() * 6;
     
     glm::vec2 *verts = new glm::vec2[num_verts];
     glm::vec2 *tex = new glm::vec2[num_verts];
@@ -42,12 +42,18 @@ Text::Text(FontAtlas *atlas, std::string text) {
     mesh->load_vertex_data(num_verts, verts);
     mesh->load_tex_coords(num_verts, tex);
     delete[] verts;
-    delete[] tex;
+    delete[] tex;*/
+    
+    mesh = new Mesh(GL_TRIANGLES);
 }
 Text::~Text() {
     delete mesh;
 }
-void Text::render() {
+//Text will never have children. It will always be a leaf
+void Text::render(Renderer *renderer) {
     atlas->bind_for_render();
-    mesh->render();
+    if (mesh != nullptr) {
+        glUniformMatrix4fv(renderer->transform_location, 1, GL_FALSE, &transform_matrix[0][0]);
+        mesh->render();
+    }
 }
