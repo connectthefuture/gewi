@@ -42,39 +42,15 @@ int main(int argc, char **argv) {
     //Register our callbacks
     glfwSetMouseButtonCallback(main_window, mouse_callback);
     
-    //Testing
-    std::string font_file("/usr/share/fonts/truetype/freefont/FreeMono.ttf");
-    FontAtlas *font = create_font_atlas(font_file, 40);
-    //font->bind_for_render();
-
-    //Bootstrap a triangle
-    /*unsigned triangle = create_triangle();
-    //Load up the bootstrap shaders
-    unsigned shader = load_shader("utils/bootstrap-shaders/bootstrap_v.glsl",
-                                  "utils/bootstrap-shaders/bootstrap_f.glsl");*/
-   
-    unsigned shader1 = load_shader("gewi/render/shaders/texture_v.glsl",
-                                   "gewi/render/shaders/texture_f.glsl");
     test_ui = new UI();
     
-    //A simple button
     Button *test_button = new Button();
-    test_button->set_click_callback(simple_click_callback);
+    test_ui->add_ui_object(test_button);
     
-    //Position the button
-    test_button->set_dim(0.5, 0.5);
-    
-    //test_ui->add_ui_object(test_button);
-    
-    //Create a text
-    Text *test_text = new Text(font, "Hello World!");
-    test_ui->add_ui_object(test_text);
+    test_button->set_style("width", "100%");
     
     //Enter the main loop
     while(!glfwWindowShouldClose(main_window)) {
-        //glUseProgram(shader);
-        //render_triangle(triangle);
-        glUseProgram(shader1);
         test_ui->render();
         
         glfwSwapBuffers(main_window);
@@ -82,8 +58,8 @@ int main(int argc, char **argv) {
     }
     
     //Clean up
-    
     delete test_ui;
+    delete test_button;
     
     glfwTerminate();
     
