@@ -9,7 +9,7 @@ namespace gewi {
     class UI {
     private:
         UIContainer *root;
-        Renderer *flat_shader;
+        Renderer *flat_shader, *texture_shader;
     public:
         UI();
         ~UI();

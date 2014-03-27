@@ -50,7 +50,14 @@ int main(int argc, char **argv) {
     
     test_ui = new UI();
     
-    Button *test_button = new Button();
+    //Load up the font atlas
+    std::string font_file("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
+    FontAtlas *atlas = new FontAtlas(font_file, 18);
+    
+    Text *test_text = new Text(atlas, "the quick brown fox jumped over the lazy dog");
+    test_ui->add_ui_object(test_text);
+    
+    /*Button *test_button = new Button();
     test_ui->add_ui_object(test_button);
     
     test_button->set_style("width", "50%");
@@ -63,7 +70,9 @@ int main(int argc, char **argv) {
     test_button1->set_style("width", "30%");
     test_button1->set_style("height", "10%");
     test_button1->set_style("margin-top", "30%");
-    test_button1->set_click_callback(simple_click_callback);
+    test_button1->set_click_callback(simple_click_callback);*/
+    
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     
     //Enter the main loop
     while(!glfwWindowShouldClose(main_window)) {
@@ -76,7 +85,7 @@ int main(int argc, char **argv) {
     
     //Clean up
     delete test_ui;
-    delete test_button;
+    delete test_text;
     
     glfwTerminate();
     

@@ -115,6 +115,7 @@ FontAtlas::FontAtlas(string &font_file, unsigned font_size) {
         char_positions[i].height = 0;
         char_positions[i].top = 0;
         char_positions[i].left = 0;
+        char_positions[i].advance = 0;
     }
     
     //Attempt to load up the font file
@@ -149,6 +150,7 @@ FontAtlas::FontAtlas(string &font_file, unsigned font_size) {
     while(bitmap_size < side_length)
         bitmap_size <<= 1;
     
+    std::cout << "Creating a font atlas of size " << bitmap_size << '\n';
     bitmap = new unsigned char[bitmap_size * bitmap_size];
     unsigned char *t = bitmap;
     for (unsigned i = 0; i < bitmap_size * bitmap_size; i++) *t++ = 0;
@@ -169,16 +171,16 @@ FontAtlas::FontAtlas(string &font_file, unsigned font_size) {
         }
         //Store the position of the character
         char_positions[i].x1 = (float) x / bitmap_size; 
-        char_positions[i].y1 = (float) (y) / bitmap_size;
-        char_positions[i].x2 = ((float) x + g->bitmap.width) / bitmap_size; 
-        char_positions[i].y2 = (float) ((y + h)) / bitmap_size;
-        char_positions[i].width = (float) g->bitmap.width / bitmap_size;
-        char_positions[i].height = (float) g->bitmap.rows / bitmap_size;
+        char_positions[i].y1 = (float) y / bitmap_size;
+        char_positions[i].x2 = (float) (x + g->bitmap.width) / bitmap_size; 
+        char_positions[i].y2 = (float) (y + g->bitmap.rows) / bitmap_size;
+        char_positions[i].width = g->bitmap.width;
+        char_positions[i].height = g->bitmap.rows;
         
-        char_positions[i].top = (float) g->bitmap_top / bitmap_size;
-        char_positions[i].left = (float) g->bitmap_left / bitmap_size;
-        //char_positions[i].y2 = (bitmap_size - ((float) y + g->bitmap.rows)) / bitmap_size;
-       
+        char_positions[i].top = g->bitmap_top;
+        char_positions[i].left = g->bitmap_left;
+        char_positions[i].advance = g->advance.x;
+        
         x += g->bitmap.width;
     }
     

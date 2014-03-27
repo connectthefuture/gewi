@@ -10,6 +10,7 @@ namespace gewi {
     class Text : public UIObject {
     private:
         FontAtlas *atlas;
+        void add_char(char c, float &base_x, float base_y, glm::vec2 *vert, glm::vec2 *tex);
     public:
         Text(FontAtlas *atlas, std::string text);
         ~Text();

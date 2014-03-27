@@ -5,8 +5,7 @@
 
 typedef struct char_position { //Store a position in texture coordinates
     float x1, y1, x2, y2;
-    float width, height;
-    float top, left;
+    short top, left, width, height, advance;
 } char_position;
 
 class FontAtlas {
