@@ -2,22 +2,6 @@
 #include "text.hpp"
 
 using namespace gewi;
-/*
-static glm::vec2 verts[] = {
-    glm::vec2(0.0f, 0.0f),
-    glm::vec2(1.0f, 0.0f),
-    glm::vec2(0.0f, 1.0f),
-    glm::vec2(1.0f, 1.0f),
-};
-
-static glm::vec2 tex_coords[] = {
-    glm::vec2(0.0f, 0.0f),
-    glm::vec2(1.0f, 0.0f),
-    glm::vec2(0.0f, 1.0f),
-    glm::vec2(1.0f, 1.0f),
-};
-
-*/
 
 void Text::add_char(char c, float &base_x, float base_y, glm::vec2 *vert, glm::vec2 *tex) {
     char_position c_pos = atlas->char_lookup(c);
@@ -53,11 +37,21 @@ void Text::add_char(char c, float &base_x, float base_y, glm::vec2 *vert, glm::v
 
 Text::Text(FontAtlas *atlas, std::string text) {
     this->atlas = atlas;
-    
+    this->mesh = nullptr;
+    set_text(text);
+}
+
+Text::Text() {
+    this->atlas = nullptr;
+    this->mesh = nullptr;
+}
+
+void Text::set_text(std::string text) {
+    if (mesh != nullptr) delete mesh; //Should I reuse the mesh?
+    this->text = text;
     
     mesh = new Mesh(GL_TRIANGLES);
     unsigned num_letters = text.size();
-    std::cout << num_letters << '\n';
     glm::vec2 *verts = new glm::vec2[num_letters * 6];
     glm::vec2 *tex = new glm::vec2[num_letters * 6];
     
@@ -76,7 +70,6 @@ Text::Text(FontAtlas *atlas, std::string text) {
     
     delete[] verts;
     delete[] tex;
-    
 }
 Text::~Text() {
     delete mesh;

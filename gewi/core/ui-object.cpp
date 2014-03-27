@@ -138,6 +138,13 @@ void UIObject::click(float x, float y) {
     }
 }
 
+void UIObject::key_press(int key, int mods) {
+    key_press_handler(key, mods);
+    for (unsigned i = 0; i < children.size(); i++) {
+        children[i]->key_press(key, mods);
+    }
+}
+
 void UIObject::set_click_callback(void (*callback)(float, float)) {
     click_callback = callback;
 }

@@ -25,7 +25,7 @@ static void initalize_free_type() {
         exit(-1);
     }
 }
-
+/*
 //Should this be in its own file since I use it a lot?
 static void write_to_bitmap(unsigned width, unsigned height, unsigned char *buffer) {
     ofstream stream;
@@ -98,7 +98,7 @@ static void write_to_bitmap(unsigned width, unsigned height, unsigned char *buff
     }
     stream.close();
 }
-
+*/
 //Class methods
 FontAtlas::FontAtlas(string &font_file, unsigned font_size) {
     if (library == nullptr) initalize_free_type();
@@ -185,7 +185,7 @@ FontAtlas::FontAtlas(string &font_file, unsigned font_size) {
     }
     
     //Write it out to an image file for debugging.
-    write_to_bitmap(bitmap_size, bitmap_size, bitmap);
+    //write_to_bitmap(bitmap_size, bitmap_size, bitmap);
     
     //Create the textures
     texture_id = 0;

@@ -29,3 +29,7 @@ void UI::add_ui_object(UIObject *obj) {
 void UI::click(float x, float y) {
     root->click(x, y);
 }
+
+void UI::key_press(int key, int mods) {
+    root->key_press(key, mods);
+}

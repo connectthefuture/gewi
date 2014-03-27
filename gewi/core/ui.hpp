@@ -16,6 +16,7 @@ namespace gewi {
         void render();
         void add_ui_object(UIObject *obj);
         void click(float x, float y);
+        void key_press(int key, int mods);
     };
 }
 #endif

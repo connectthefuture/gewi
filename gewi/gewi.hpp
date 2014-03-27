@@ -7,4 +7,5 @@
 //Include the core widgets
 #include "widgets/button.hpp"
 #include "widgets/text.hpp"
+#include "widgets/text-input.hpp"
 #endif

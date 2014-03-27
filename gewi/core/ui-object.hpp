@@ -54,10 +54,13 @@ namespace gewi {
         
         //Methods for interaction
         bool contains_point(float x, float y);
+        
         void click(float x, float y);
         virtual void click_handler(float x, float y) { }//Runs on a confirmed click
-        
         void set_click_callback(void (*callback)(float, float));
+        
+        void key_press(int key, int mods);
+        virtual void key_press_handler(int key, int mods) { }
     };
 }
 #endif
