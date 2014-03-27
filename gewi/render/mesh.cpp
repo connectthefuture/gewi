@@ -4,6 +4,14 @@ using namespace gewi;
 
 Mesh::Mesh(GLenum prim_type) : prim_type(prim_type) {
     glGenVertexArrays(1, &vao_id);
+    vbuf_id = 0;
+    texbuf_id = 0;
+}
+
+Mesh::~Mesh() {
+    glDeleteVertexArrays(1, &vao_id);
+    if (vbuf_id != 0) glDeleteBuffers(1, &vbuf_id);
+    if (texbuf_id != 0) glDeleteBuffers(1, &texbuf_id);
 }
 void Mesh::load_vertex_data(unsigned num_vertices, glm::vec2 *verts) {
     this->num_vertices = num_vertices;

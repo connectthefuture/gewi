@@ -14,6 +14,7 @@ namespace gewi {
         unsigned num_vertices;
     public:
         Mesh(GLenum prim_type);
+        ~Mesh();
         void load_vertex_data(unsigned num_vertices, glm::vec2 *verts);
         void load_tex_coords(unsigned num_vertices, glm::vec2 *tex_coords);
         void update_vertex_data(unsigned num_vertices, glm::vec2 *verts);
