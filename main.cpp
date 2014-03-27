@@ -66,17 +66,18 @@ int main(int argc, char **argv) {
     ******************************************************************/
     
     //Load up the font atlas
-    //std::string font_file("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
-    //FontAtlas *atlas = new FontAtlas(font_file, 50);
+    std::string font_file("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
+    FontAtlas *atlas = new FontAtlas(font_file, 50);
     
-    //Text *test_text_1 = new Text(atlas, std::string("test1"));
+    Text *test_text_1 = new Text(atlas, std::string("test1"));
     //Text *test_text_2 = new Text(atlas, std::string("test2"));
     Button *test_button_1 = new Button();
     Button *test_button_2 = new Button();
     
     test_button_1->set_dims(100, 100);
-    test_button_2->set_dims(570, 50);
+    test_button_2->set_dims(100, 50);
    
+    test_ui->add_element(test_text_1);
     test_ui->add_element(test_button_2);
     test_ui->add_element(test_button_1);
     

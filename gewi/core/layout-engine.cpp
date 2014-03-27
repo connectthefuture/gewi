@@ -9,12 +9,13 @@ void UILayoutEngine::calculate_layout(UIElement *root) {
     float current_x = root->x;
     float current_y = root->y;
     float y_advance = 0.0f;
-    std::cout << "In here " << root->children.size() << "\n";
     for (unsigned i = 0; i < root->children.size(); i++) {
         //Check for overflow and line break.
         if (current_x + root->children[i]->width > root->width) {
             current_x = 0;
             current_y += y_advance;
+            
+            //TODO: Signal a parent if there is a line break because it could affect the height
         }
         root->children[i]->set_pos(current_x, current_y);
         
