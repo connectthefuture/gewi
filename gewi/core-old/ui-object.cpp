@@ -9,7 +9,7 @@ using namespace gewi;
 
 //Converts from something like 50% to an actual number openGL can
 //use like 0.5f;
-static float style_to_dim(std::string style, UIObject *parent) {
+/*static float style_to_dim(std::string style, UIObject *parent) {
     int val;
     std::stringstream ss;
     ss.str(style);
@@ -19,7 +19,7 @@ static float style_to_dim(std::string style, UIObject *parent) {
         return val / 100.0f;
     }
     return (float) val;
-}
+}*/
 
 UIObject::UIObject() {
     mesh = nullptr;
@@ -31,6 +31,8 @@ UIObject::UIObject() {
     parent = nullptr;
     selected = false;
     click_callback = nullptr;
+    containing_width = 0.0f;
+    containing_height = 0.0f;
 }
 
 UIObject::~UIObject() {
@@ -48,24 +50,8 @@ void UIObject::render(Renderer *renderer) {
 }
 
 void UIObject::add_child(UIObject *child) {
-    UIObject *last;
-    if (children.size() != 0)
-        last = children.back();
-    else
-        last = nullptr;
     children.push_back(child);
-    child->set_parent(this);
-    //Position the child properly
-    //NOTE: For now we assume that each element will be on its own line, with x = 0;
-    if (last != nullptr) {
-        child->x_base = 0;
-        child->y_base = last->y_base + last->height;
-    }
-    else {
-        child->x_base = 0;
-        child->y_base = 0;
-    }
-        
+    child->set_parent(this);    
 }
 
 void UIObject::set_parent(UIObject *parent) {
@@ -73,38 +59,8 @@ void UIObject::set_parent(UIObject *parent) {
 }
 
 void UIObject::update_transform() {
-    transform_matrix = glm::translate(x * 2.0f - 1.0f, -y * 2.0f + 1.0f, 0.0f) *
-                       glm::scale(width * 2, -height * 2, 1.0f); // - height accounts for the fact that the UI coordinates start at the upper left
-}
-
-void UIObject::apply_style() {
-    //Get the width/height
-    std::string result = style->get_style("width");
-    if (result != "") {
-        float value = style_to_dim(result, parent);
-        if (result.back() == '%') width = parent->width * value;
-        else width = value;
-    }
-    
-    result = style->get_style("height");
-    if (result != "") {
-        float value = style_to_dim(result, parent);
-        if (result.back() == '%') height = parent->height * value;
-        else height = value;
-    }
-    
-    result = style->get_style("margin-top");
-    if (result != "") {
-        float value = style_to_dim(result, parent);
-        if (result.back() == '%') margin_top = parent->height * value;
-        else margin_top = value;
-    }
-    
-    x = x_base;
-    y = y_base + margin_top;
-    
-    //Create the new matrices
-    update_transform();
+    transform_matrix = glm::translate(x * 2.0f - 1.0f,  -1.0f + y * 2.0f, 0.0f) * //Convert from 0,0 at the upper left to 0, 0 in the center
+                       glm::scale(width, height, 1.0f); // - height accounts for the fact that the UI coordinates start at the bottom left
 }
 
 UIObject *UIObject::get_parent() {
@@ -114,11 +70,45 @@ UIObject *UIObject::get_parent() {
 //Methods for changing style
 void UIObject::set_style(std::string key, std::string value) {
     style->set_style(key, value);
-    apply_style();
 }
 std::string UIObject::get_style(std::string key) {
     return style->get_style(key);
 }
+
+void UIObject::calculate_dims() {
+    width = containing_width;
+    height = containing_height;
+    for (unsigned i = 0; i < children.size(); i++) {
+        children[i]->calculate_dims();
+        width += children[i]->width;
+        height += children[i]->height;
+    }
+    if (parent == nullptr) { //Make sure the root covers everything
+        width = 1.0f;
+        height = 1.0f;
+    }
+    
+    std::cout << width << std::endl;
+}
+
+void UIObject::layout() {
+    float current_x = x;
+    float current_y = y;
+    for (unsigned i = 0; i < children.size(); i++) {
+        children[i]->x = current_x;
+        children[i]->y = current_y;
+        children[i]->layout();
+        current_x += children[i]->width;
+    }
+    update_transform();
+}
+
+
+void UIObject::set_pos(float x, float y) {
+    this->x = x;
+    this->y = y;
+}
+
 
 //Methods for interaction
 bool UIObject::contains_point(float x, float y) {

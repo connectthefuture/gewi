@@ -26,8 +26,7 @@ namespace gewi {
         
         //Style elements
         Style *style;
-        void apply_style();
-        
+       
         //Attributes for interaction
         bool selected;
         
@@ -37,6 +36,8 @@ namespace gewi {
     protected:
         Mesh *mesh;
         glm::mat4 transform_matrix; //Combination of translation and scale.
+        
+        float containing_width, containing_height; //Minimum width/height needed to contain this object.
     public:
         //Every UIobject must be renderable.
         UIObject();
@@ -47,6 +48,11 @@ namespace gewi {
         void add_child(UIObject *child);
         void set_parent(UIObject *parent);
         UIObject *get_parent();
+        
+        //Layout functions
+        void set_pos(float x, float y);
+        virtual void calculate_dims();
+        void layout();
         
         //Methods for changing style
         void set_style(std::string key, std::string value);

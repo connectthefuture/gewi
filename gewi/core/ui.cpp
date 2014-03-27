@@ -1,35 +1,67 @@
+#include <iostream>
+#include <SOIL/SOIL.h>
+
+
 #include "ui.hpp"
+#include "ui-element.hpp"
+#include "layout-engine.hpp"
 
 using namespace gewi;
-UI::UI() {
-    root = new UIContainer();
-    flat_shader = new Renderer("gewi/render/shaders/flat_v.glsl",
-                               "gewi/render/shaders/flat_f.glsl");
-    texture_shader = new Renderer("gewi/render/shaders/texture_v.glsl",
-                               "gewi/render/shaders/texture_f.glsl");
-}
 
+UI::UI(int width, int height) {
+    root = new UIElement();
+    renderer = new Renderer("gewi/render/shaders/texture_v.glsl",
+                            "gewi/render/shaders/texture_f.glsl");
+    layout_engine = new UILayoutEngine();
+    //Get the current viewport size
+    this->width = width;
+    this->height = height;
+}
 UI::~UI() {
     delete root;
-    delete texture_shader;
-    delete flat_shader;
+    delete renderer;
+    delete layout_engine;
 }
 
+void UI::add_element(UIElement *elem) {
+    //Add it to the root
+    root->add_element(elem);
+    elem->set_ui(this);
+    elem->update_transform_matrix();
+    //Add it to the render queue
+    element_skin e;
+    e.element = elem;
+    e.texture_id = skin_id;
+    render_queue.push_front(e);
+}
+void UI::layout() {
+    layout_engine->layout(root);
+}
 void UI::render() {
-    //flat_shader->enable();
-    //root->render(flat_shader);
-    texture_shader->enable();
-    root->render(texture_shader);
+    unsigned last = 0;
+    renderer->enable();
+    for (std::list<element_skin>::iterator it=render_queue.begin();
+         it != render_queue.end();
+         it++) {
+        //Check if we need to bind a new texture
+        if(it->texture_id != last) {
+            glBindTexture(GL_TEXTURE_2D, 1);
+            last = it->texture_id;
+        }
+        it->element->render(renderer);
+    }
 }
 
-void UI::add_ui_object(UIObject *obj) {
-    root->add_child(obj);
-}
-
-void UI::click(float x, float y) {
-    root->click(x, y);
-}
-
-void UI::key_press(int key, int mods) {
-    root->key_press(key, mods);
+void UI::set_skin(const char *skin_path) {
+    int img_width, img_height;
+    unsigned char* img = SOIL_load_image(skin_path, &img_width, &img_height, NULL, 0);
+    if (img == nullptr) std::cerr << "SOIL loading error: '" << SOIL_last_result() << "' (" << skin_path << ")" << std::endl;   
+    glGenTextures(1, &skin_id);
+    
+    glBindTexture(GL_TEXTURE_2D, skin_id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP); 
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img);    
 }

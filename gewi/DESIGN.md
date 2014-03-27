@@ -124,3 +124,53 @@ Extends the UIObject, but requires a different renderer. Uses a font atlas to re
 to the screen.
 
 A good resource is here http://www.html5rocks.com/en/tutorials/internals/howbrowserswork/
+
+
+Ok I think I'm trying to handle too much at once. Let's simplify. What is the minimum that I can get away with?
+
+    * Everything is an inline block.
+    * Width is set to the sum of the child widths + padding
+    * height is set to the maximum of the child heights + padding
+    * Support padding and width/height keywords. Allow pixel values and percentages
+    * Assume all elements will take up all avaliable width unless otherwise specified
+    
+To create our layout we do the following
+
+1) Dimension pass. Work down the tree and determine the width/height of the object (see above)
+2) Layout pass. Work down the tree, each parent sets the x/y of the children before recursing down to each child.
+
+Dimension Pass
+--------------
+
+content_width: return sum children width (virtual, overridden by the text class (could also be overridden to introduce minimum button size, etc.))
+content_height: return max children height (virtual, overriden by the text class)
+
+calculate_dimensions:
+    for child in children:
+        child->calculate_dimensions()
+    prefered_width = content_width() + padding_left() + padding_right()
+    prefered_height = content_height() + padding_top() + padding_bottom()
+    clamp prefered_width/prefered_height
+    
+layout:
+    for child in children:
+        //Check for line breaks and act appropriatly
+        child->set_position(x, y)
+        child->layout()
+        x += child->width;
+        
+To calculate the width/height:
+
+Pass 1) Calculate the minimum widths (using text/minimum width attribute)
+Pass 2) Calculate the prefered widths (using the width attributes, use minimum if no other width has been entered)
+
+
+Root has dimensions in pixels given by the viewport. x represents offset from the left, y represents offset from the top.
+
+Text has a containing width/height given by the width/height of the text. Any element has a containing width/height that
+is the sum of its children. 
+
+UIObject {
+    //Layout Functions
+    
+};

@@ -2,7 +2,7 @@
 #include "text-input.hpp"
 
 using namespace gewi;
-
+/*
 TextInput::TextInput(FontAtlas *atlas) {
     this->atlas = atlas;
     set_text("");
@@ -21,4 +21,4 @@ void TextInput::key_press_handler(int key, int mods) {
             text += tolower(key);
     }
     set_text(text);
-}
+}*/

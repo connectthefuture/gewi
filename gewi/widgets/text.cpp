@@ -2,8 +2,11 @@
 #include "text.hpp"
 
 using namespace gewi;
-
-void Text::add_char(char c, float &base_x, float base_y, glm::vec2 *vert, glm::vec2 *tex) {
+Text::Text() { }
+Text::~Text() { }
+Text::Text(FontAtlas *atlas, std::string text) { }
+/*
+float Text::add_char(char c, float &base_x, float base_y, glm::vec2 *vert, glm::vec2 *tex) {
     char_position c_pos = atlas->char_lookup(c);
     
     //TODO: Use GLFW to get the actual screen size
@@ -33,6 +36,8 @@ void Text::add_char(char c, float &base_x, float base_y, glm::vec2 *vert, glm::v
     *tex++ = glm::vec2(c_pos.x2, c_pos.y2);
     
     base_x += (c_pos.advance >> 6) * px;
+    
+    return h;
 }
 
 Text::Text(FontAtlas *atlas, std::string text) {
@@ -58,9 +63,10 @@ void Text::set_text(std::string text) {
     glm::vec2 *current_vertex, *current_tex;
     current_tex = tex;
     current_vertex = verts;
-    float x = 0, y = 0;
+    float x = 0, y = 0, max_height = 0;
     for (unsigned i = 0; i < num_letters; i++) {
-        add_char(text[i], x, y, current_vertex, current_tex);
+        float h = add_char(text[i], x, y, current_vertex, current_tex);
+        if (h > max_height) max_height = h;
         current_vertex += 6;
         current_tex += 6;
     }
@@ -70,6 +76,9 @@ void Text::set_text(std::string text) {
     
     delete[] verts;
     delete[] tex;
+    
+    containing_width = x / 2.0f;
+    containing_height = h / 2.0f;
 }
 Text::~Text() {
     delete mesh;
@@ -82,3 +91,4 @@ void Text::render(Renderer *renderer) {
         mesh->render();
     }
 }
+*/

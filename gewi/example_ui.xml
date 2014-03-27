@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+    <container>
+        <text>Test title</text>
+        <button id="test_button_1">
+            <text>Test button</text>
+        </button>
+    </container>
+    <container style="float: bottom;">
+        <text>Text on the bottom</text>
+        <text-input style="width: 30%"/>
+    </container>
+</ui>

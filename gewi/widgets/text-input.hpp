@@ -3,7 +3,7 @@
 
 #include "text.hpp"
 
-namespace gewi {
+/*namespace gewi {
     class TextInput : public Text {
     private:
     public:
@@ -11,5 +11,5 @@ namespace gewi {
         ~TextInput();
         void key_press_handler(int key, int mods);
     };
-}
+}*/
 #endif

@@ -19,14 +19,13 @@
 using namespace gewi; //Make sure we use the gewi namespace
 
 static UI *test_ui = nullptr;
-//static Text *test_text = nullptr;
 
 void simple_click_callback(float x, float y) {
     std::cout << "Click callback triggered\n";
     //test_text->set_text("clicked!");
 }
 
-void mouse_callback(GLFWwindow *window, int button, int action, int mods) {
+/*void mouse_callback(GLFWwindow *window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         double x, y;
         int width, height;
@@ -35,15 +34,15 @@ void mouse_callback(GLFWwindow *window, int button, int action, int mods) {
         //Normalize the coordinates to device space
         x /= width;
         y /= height;
-        test_ui->click(x, y);
+       //test_ui->click(x, y);
     }
 }
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) { 
     if (action != GLFW_RELEASE) {
-        test_ui->key_press(key, mods);
+        //test_ui->key_press(key, mods);
     }
-}
+}*/
 
 void window_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -53,38 +52,36 @@ int main(int argc, char **argv) {
     initialize(true); //Use the bootstrap initializer and window creation
     GLFWwindow *main_window = create_window(640, 480, "GEWI test", true);
     //Register our callbacks
-    glfwSetMouseButtonCallback(main_window, mouse_callback);
-    glfwSetKeyCallback(main_window, key_callback);
+    //glfwSetMouseButtonCallback(main_window, mouse_callback);
+    //glfwSetKeyCallback(main_window, key_callback);
     glfwSetWindowSizeCallback(main_window, window_size_callback);
     
-    test_ui = new UI();
+    test_ui = new UI(640, 480);
+    test_ui->set_skin("test.png");
+    
+    /*******************************************************************
+     * In this test UI we have 2 static texts, a text input and and two
+     * buttons. On top there should be a text followed by a button. Below
+     * that should be a text, a text input and a button
+    ******************************************************************/
     
     //Load up the font atlas
-    std::string font_file("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
-    FontAtlas *atlas = new FontAtlas(font_file, 18);
+    //std::string font_file("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
+    //FontAtlas *atlas = new FontAtlas(font_file, 50);
     
-    TextInput *test_input = new TextInput(atlas);
-    test_ui->add_ui_object(test_input);
-    /*test_text = new Text(atlas, "the quick brown fox jumped over the lazy dog");
+    //Text *test_text_1 = new Text(atlas, std::string("test1"));
+    //Text *test_text_2 = new Text(atlas, std::string("test2"));
+    Button *test_button_1 = new Button();
+    Button *test_button_2 = new Button();
+    
+    test_button_1->set_dims(100, 100);
+    test_button_2->set_dims(570, 50);
    
+    test_ui->add_element(test_button_2);
+    test_ui->add_element(test_button_1);
     
-    Button *test_button = new Button();
-    test_ui->add_ui_object(test_button);
+    test_ui->layout();
     
-    test_button->set_style("width", "50%");
-    test_button->set_style("height", "10%");
-    test_button->set_click_callback(simple_click_callback);
-    
-    test_ui->add_ui_object(test_text);*/
-    /*
-    
-    Button *test_button1 = new Button();
-    test_ui->add_ui_object(test_button1);
-    
-    test_button1->set_style("width", "30%");
-    test_button1->set_style("height", "10%");
-    test_button1->set_style("margin-top", "30%");
-    test_button1->set_click_callback(simple_click_callback);*/
     
     //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     
