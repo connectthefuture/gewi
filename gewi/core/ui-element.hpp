@@ -41,6 +41,7 @@ namespace gewi {
 
         
         void render(Renderer *renderer);
+        virtual unsigned get_texture() { return 0; }
         
         void set_ui(UI *ui);
         

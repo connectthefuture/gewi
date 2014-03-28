@@ -33,7 +33,11 @@ void UI::add_element(UIElement *elem) {
     //Add it to the render queue
     element_skin e;
     e.element = elem;
-    e.texture_id = skin_id;
+    unsigned tex = elem->get_texture();
+    if (tex == 0)
+        e.texture_id = skin_id;
+    else
+        e.texture_id = tex;
     render_queue.push_front(e);
 }
 void UI::layout() {
@@ -47,7 +51,7 @@ void UI::render() {
          it++) {
         //Check if we need to bind a new texture
         if(it->texture_id != last) {
-            glBindTexture(GL_TEXTURE_2D, 2);
+            glBindTexture(GL_TEXTURE_2D, it->texture_id);
             last = it->texture_id;
         }
         it->element->render(renderer);
