@@ -16,6 +16,8 @@ UI::UI(int width, int height) {
     //Get the current viewport size
     this->width = width;
     this->height = height;
+    
+    root->set_dims(width, height);
 }
 UI::~UI() {
     delete root;
@@ -45,7 +47,7 @@ void UI::render() {
          it++) {
         //Check if we need to bind a new texture
         if(it->texture_id != last) {
-            glBindTexture(GL_TEXTURE_2D, 1);
+            glBindTexture(GL_TEXTURE_2D, 2);
             last = it->texture_id;
         }
         it->element->render(renderer);
