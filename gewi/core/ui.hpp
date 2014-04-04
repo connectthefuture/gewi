@@ -33,15 +33,19 @@ namespace gewi {
         void layout(); //Use the current layout engine to layout the elements starting from the root.
         void render(); //Render the UI. Assumes layout has already been called and is accurate.
         
+        void render_register(UIElement *elem);
+        
         //Set the skin
         void set_skin(const char *skin_path);
         
         //Interaction code
-        //...
+        void click(float x, float y);
         
         //Getters and setters
         int get_width() { return width; }
         int get_height() { return height; } 
+        
+        void resize(int width, int height);
     };
 }
 #endif

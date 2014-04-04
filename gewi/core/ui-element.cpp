@@ -12,6 +12,8 @@ UIElement::UIElement() {
     container = nullptr;
     x = y = width = height = 0.0f;
     transform_matrix = glm::mat4(1.0f);
+    style = new Style();
+    click_callback = nullptr;
 }
 UIElement::~UIElement() {
     if (mesh != nullptr) delete mesh;
@@ -61,4 +63,33 @@ void UIElement::render(Renderer *renderer) {
 
 void UIElement::set_ui(UI *ui) {
     container = ui;
+    for (unsigned i = 0; i < children.size(); i++) {
+        children[i]->set_ui(ui);
+    }
+    update_transform_matrix();
+    ui->render_register(this);
+}
+
+void UIElement::set_style(std::string key, std::string value) {
+    style->set_style(key, value);
+}
+
+void UIElement::click(float x, float y) {
+    if (contains_point(x, y)) {
+        click_handler(x, y);
+        if (click_callback != nullptr) click_callback(x, y);
+        for (unsigned i = 0; i < children.size(); i++) {
+            children[i]->click(x, y);
+        }
+    }
+}
+
+bool UIElement::contains_point(float x, float y) {
+    return (this->x < x && this->y < y &&
+            this->x + width > x && this->y + height > y);
+}
+void UIElement::click_handler(float x, float y) { }
+
+void UIElement::install_click_callback(void (*callback) (float x, float y)) {
+    click_callback = callback;
 }

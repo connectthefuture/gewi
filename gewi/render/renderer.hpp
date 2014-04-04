@@ -10,7 +10,7 @@ namespace gewi {
         
         void enable();
         
-        int transform_location;
+        int transform_location, mode_location;
     };
 }
 

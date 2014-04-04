@@ -200,9 +200,6 @@ FontAtlas::~FontAtlas() {
     delete[] bitmap;
 }
 
-void FontAtlas::bind_for_render() {
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-}
 
 char_position FontAtlas::char_lookup(char c) {
     return char_positions[(int) c];
@@ -226,4 +223,8 @@ FontAtlas *create_font_atlas(string &font_file, unsigned font_size) {
     //Not in the cache? Make a new font atlas
     atlas = new FontAtlas(font_file, font_size);
     return atlas;
+}
+
+unsigned FontAtlas::get_texture() {
+    return texture_id;
 }

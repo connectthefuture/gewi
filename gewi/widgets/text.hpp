@@ -19,7 +19,13 @@ namespace gewi {
         ~Text();
         
         void set_text(std::string text);
+        
+        void set_dims(float width, float height) { }; //Text is fixed size
         void update_transform_matrix();
+        
+        unsigned get_texture();
+        
+        void set_ui(UI *ui);
     };
 }
 #endif

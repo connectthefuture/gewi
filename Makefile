@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-g -Wall -Werror -Wpedantic -std=c++11 -I/usr/include/freetype2
-LDFLAGS=-lGLEW -lGL -lglfw3 -lX11 -lXxf86vm -lpthread -lXrandr -lXi -lSOIL -lfreetype
+LDFLAGS=-lGLEW -lGL -lglfw3 -lX11 -lXxf86vm -lpthread -lXrandr -lXi -lSOIL -lfreetype -lpng
 
 UTILS_CPP := $(wildcard utils/*.cpp)
 
@@ -28,4 +28,4 @@ utils.a: $(UTILS_OBJ)
 gewi.a: $(GEWI_CORE_OBJ) $(GEWI_RENDER_OBJ) $(GEWI_LAYOUT_OBJ) $(GEWI_WIDGETS_OBJ)
 	ar r $@ $^ -s
 clean:
-	rm -rf *.o utils.a gewi.a $(UTILS_OBJ) $(GEWI_CORE_OBJ) $(GEWI_RENDER_OBJ) $(GEWI_LAYOUT_OBJ) $(GEWI_WIDGETS_OBJ)
+	rm -rf *.o *.out utils.a gewi.a $(UTILS_OBJ) $(GEWI_CORE_OBJ) $(GEWI_RENDER_OBJ) $(GEWI_LAYOUT_OBJ) $(GEWI_WIDGETS_OBJ)

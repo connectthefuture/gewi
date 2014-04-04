@@ -23,7 +23,7 @@ public:
     FontAtlas(std::string &font_file, unsigned font_size);
     ~FontAtlas();
     
-    void bind_for_render();
+    unsigned get_texture();
     char_position char_lookup(char c);
     
 };

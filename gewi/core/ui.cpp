@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <SOIL/SOIL.h>
 
 
@@ -17,7 +18,8 @@ UI::UI(int width, int height) {
     this->width = width;
     this->height = height;
     
-    root->set_dims(width, height);
+    root->set_style("width",  static_cast<std::ostringstream*>( &(std::ostringstream() << width) )->str());
+    root->set_style("height",  static_cast<std::ostringstream*>( &(std::ostringstream() << height) )->str());
 }
 UI::~UI() {
     delete root;
@@ -25,20 +27,22 @@ UI::~UI() {
     delete layout_engine;
 }
 
+void UI::render_register(UIElement *elem) {
+    element_skin e;
+    e.element = elem;
+    unsigned tex = elem->get_texture();
+    if (tex == 0) e.texture_id = skin_id;
+    else e.texture_id = tex;
+    std::list< element_skin>::iterator it = render_queue.begin();
+    while(it != render_queue.end() && it->texture_id < e.texture_id) it++;
+    render_queue.insert(it, e);
+}
+        
+
 void UI::add_element(UIElement *elem) {
     //Add it to the root
     root->add_element(elem);
     elem->set_ui(this);
-    elem->update_transform_matrix();
-    //Add it to the render queue
-    element_skin e;
-    e.element = elem;
-    unsigned tex = elem->get_texture();
-    if (tex == 0)
-        e.texture_id = skin_id;
-    else
-        e.texture_id = tex;
-    render_queue.push_front(e);
 }
 void UI::layout() {
     layout_engine->layout(root);
@@ -53,6 +57,8 @@ void UI::render() {
         if(it->texture_id != last) {
             glBindTexture(GL_TEXTURE_2D, it->texture_id);
             last = it->texture_id;
+            if (it->texture_id != skin_id) glUniform1i(renderer->mode_location, 1);
+            else glUniform1i(renderer->mode_location, 0);
         }
         it->element->render(renderer);
     }
@@ -69,5 +75,18 @@ void UI::set_skin(const char *skin_path) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP); 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP); 
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, img);    
+}
+
+void UI::resize(int width, int height) {
+    this->width = width;
+    this->height = height;
+    root->set_style("width",  static_cast<std::ostringstream*>( &(std::ostringstream() << width) )->str());
+    root->set_style("height",  static_cast<std::ostringstream*>( &(std::ostringstream() << height) )->str());
+    root->set_ui(this);
+}
+
+void UI::click(float x, float y) {
+    root->click(x, y);
 }
